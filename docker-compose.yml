@@ -1,0 +1,27 @@
+version: '3'
+services:
+  target_1:
+    build: .
+    command: node app.js target
+    ports:
+      - 9997:9997
+  target_2:
+    build: .
+    command: node app.js target
+    ports:
+      - 9998:9997
+  splitter:
+    build: .
+    command: node app.js splitter
+    ports:
+      - 9999:9997
+    depends_on:
+      - target_1
+      - target_2
+  agent:
+    build: .
+    command: node app.js agent
+    ports:
+      - 10000:9997
+    depends_on:
+      - splitter
