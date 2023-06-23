@@ -59,6 +59,7 @@ def read_logs(service_name):  # container-level logs
 
 
 def test_logs(manage_services):
+    time.sleep(10)
     event_log1 = read_file('nodeecosystsm_target_1_1',
                            '/usr/src/app/events.log')  # container naming convention is different at this level than inside docker-compose
     event_log2 = read_file('nodeecosystsm_target_2_1', '/usr/src/app/events.log')
