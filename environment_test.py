@@ -37,6 +37,11 @@ def manage_services():
     stop_services()
 
 
+def get_target_container_names():
+    all_containers = client.containers.list()
+    target_container_names = [container.name for container in all_containers if 'target' in container.name]
+    return target_container_names
+    
 def read_file(service_name, file_name):
     container = client.containers.get(service_name)
 
@@ -62,9 +67,11 @@ def read_logs(service_name):  # container-level logs
 
 def test_logs(manage_services):
     time.sleep(10)
-    event_log1 = read_file('nodeecosystsm_target_1_1',
+
+    target_containers = get_target_container_names()
+    event_log1 = read_file(target_containers[0],
                            '/usr/src/app/events.log')  # container naming convention is different at this level than inside docker-compose
-    event_log2 = read_file('nodeecosystsm_target_2_1', '/usr/src/app/events.log')
+    event_log2 = read_file(target_containers[-1], '/usr/src/app/events.log')
     # print(event_log1)
 
     event_log1 += '\n'  # ensure each log is newline terminated
